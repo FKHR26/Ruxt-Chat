@@ -1,0 +1,5 @@
+{
+  "name": "rust-chat",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "postStartCommand": "sudo service postgresql start || true"
+}

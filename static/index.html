@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>rust-chat</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="authScreen">
+    <div id="authBox">
+      <h2>rust-chat</h2>
+      <input id="authUsername" placeholder="Username" autocomplete="username">
+      <input id="authPassword" placeholder="Password" type="password" autocomplete="current-password">
+      <button id="loginBtn">Log in</button>
+      <button id="signupBtn">Sign up</button>
+      <p id="authError"></p>
+    </div>
+  </div>
+
+  <div id="app" style="display:none">
+  <div id="servers"></div>
+  <div id="channels"><h2>Channels</h2><div id="channelList"></div></div>
+  <div id="main">
+    <div id="messages"></div>
+    <div id="input-bar">
+      <input id="msgInput" placeholder="Message" autocomplete="off">
+    </div>
+  </div>
+  </div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,64 +1,80 @@
 :root {
-  --bg: #313338; --sidebar: #2b2d31; --servers: #1e1f22; --accent: #5865f2;
-  --text: #dbdee1; --muted: #949ba4;
+  --bg: #1e1f22; --panel: #2b2d31; --accent: #5865f2;
+  --text: #dbdee1; --muted: #949ba4; --bubble-me: #5865f2; --bubble-them: #2b2d31;
 }
 * { box-sizing: border-box; }
 body { margin: 0; font-family: "gg sans", Helvetica, Arial, sans-serif;
-       background: var(--bg); color: var(--text); height: 100vh; }
+       background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
 
 #app { display: flex; height: 100vh; width: 100vw; }
 
-#servers { width: 72px; background: var(--servers); padding: 12px 0; display: flex;
-           flex-direction: column; align-items: center; gap: 8px; }
+/* ---------- Left sidebar ---------- */
+#sidebar { width: 360px; min-width: 280px; display: flex; flex-direction: column;
+           border-right: 1px solid #26272b; background: var(--bg); }
 
-.server-icon { width: 48px; height: 48px; border-radius: 24px; background: #313338;
-               display: flex; align-items: center; justify-content: center;
-               cursor: pointer; font-weight: 600; transition: border-radius .15s; }
+.top-bar { display: flex; align-items: center; justify-content: space-between;
+           padding: 16px; border-bottom: 1px solid #35373c; }
+.top-bar h1 { font-size: 20px; margin: 0; }
+.icon-btn { background: var(--accent); color: white; border: none; border-radius: 50%;
+            width: 36px; height: 36px; font-size: 18px; cursor: pointer; line-height: 1; }
 
-.server-icon:hover, .server-icon.active { border-radius: 16px; background: var(--accent); }
+.tab-page { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+.placeholder-text { color: var(--muted); text-align: center; margin-top: 40px; }
 
-#channels { width: 200px; background: var(--sidebar); padding: 12px; }
+#friendList { flex: 1; overflow-y: auto; }
+.friend-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+              cursor: pointer; border-bottom: 1px solid #26272b; }
+.friend-row:hover, .friend-row.active { background: var(--panel); }
+.friend-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent);
+                  display: flex; align-items: center; justify-content: center; font-weight: 600;
+                  flex-shrink: 0; }
+.friend-name { font-size: 15px; }
 
-#channels h2 { font-size: 12px; color: var(--muted); text-transform: uppercase; margin: 4px 0 8px; }
+#tabBar { display: flex; border-top: 1px solid #35373c; background: var(--panel); }
+.tab-btn { flex: 1; padding: 12px 0; background: none; border: none; color: var(--muted);
+           font-size: 13px; cursor: pointer; }
+.tab-btn.active { color: var(--accent); font-weight: 600; }
 
-.channel { padding: 6px 8px; border-radius: 4px; cursor: pointer; color: var(--muted); font-size: 14px; }
+/* ---------- Right pane ---------- */
+#mainPane { flex: 1; display: flex; flex-direction: column; position: relative; background: var(--bg); }
 
-.channel:hover { background: #35373c; color: var(--text); }
+#emptyState { flex: 1; display: flex; align-items: center; justify-content: center; }
+#emptyState p { color: var(--muted); font-size: 15px; }
 
-.channel.active { background: #3f4248; color: var(--text); }
+#dmView { position: absolute; inset: 0; background: var(--bg); display: flex; flex-direction: column; }
+#messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.bubble { max-width: 70%; padding: 8px 12px; border-radius: 14px; font-size: 14px; line-height: 1.3; }
+.bubble.me { align-self: flex-end; background: var(--bubble-me); color: white; border-bottom-right-radius: 4px; }
+.bubble.them { align-self: flex-start; background: var(--bubble-them); border-bottom-left-radius: 4px; }
 
-#main { flex: 1; display: flex; flex-direction: column; }
-
-#messages { flex: 1; overflow-y: auto; padding: 16px; }
-
-.msg { margin-bottom: 10px; }
-
-.msg .user { color: var(--accent); font-weight: 600; margin-right: 6px; }
-
-#input-bar { padding: 16px; }
-
-#input-bar input { width: 100%; padding: 10px 12px; border: none; border-radius: 8px;
-                    background: #383a40; color: var(--text); font-size: 14px; }
-
+#input-bar { padding: 12px 16px; border-top: 1px solid #35373c; }
+#input-bar input { width: 100%; padding: 10px 14px; border: none; border-radius: 20px;
+                    background: var(--panel); color: var(--text); font-size: 14px; }
 #input-bar input:focus { outline: 2px solid var(--accent); }
 
-
-#authScreen { width: 100vw; height: 100vh; display: flex; align-items: center;
-              justify-content: center; }
-
-#authBox { background: var(--sidebar); padding: 32px; border-radius: 8px;
-           width: 300px; display: flex; flex-direction: column; gap: 10px; }
-
+/* ---------- Auth screen ---------- */
+#authScreen { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
+#authBox { background: var(--panel); padding: 32px; border-radius: 8px; width: 300px;
+           display: flex; flex-direction: column; gap: 10px; }
 #authBox h2 { margin: 0 0 8px; text-align: center; }
-
-#authBox input { padding: 10px 12px; border: none; border-radius: 6px;
-                  background: #383a40; color: var(--text); font-size: 14px; }
-
+#authBox input { padding: 10px 12px; border: none; border-radius: 6px; background: #383a40;
+                  color: var(--text); font-size: 14px; }
 #authBox button { padding: 10px; border: none; border-radius: 6px; cursor: pointer;
                    font-weight: 600; font-size: 14px; }
-
 #loginBtn { background: var(--accent); color: white; }
-
 #signupBtn { background: #3f4248; color: var(--text); }
-
 #authError { color: #f23f42; font-size: 13px; margin: 0; min-height: 16px; }
+
+/* ---------- Add friend modal ---------- */
+#addFriendModal { position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+                   display: flex; align-items: center; justify-content: center; z-index: 10; }
+#addFriendBox { background: var(--panel); padding: 24px; border-radius: 8px; width: 280px;
+                display: flex; flex-direction: column; gap: 10px; }
+#addFriendBox h3 { margin: 0; }
+#addFriendBox input { padding: 10px 12px; border: none; border-radius: 6px; background: #383a40;
+                       color: var(--text); font-size: 14px; }
+#addFriendBox button { padding: 10px; border: none; border-radius: 6px; cursor: pointer;
+                        font-weight: 600; font-size: 14px; }
+#confirmAddFriend { background: var(--accent); color: white; }
+#cancelAddFriend { background: #3f4248; color: var(--text); }
+#addFriendError { color: #f23f42; font-size: 13px; margin: 0; min-height: 16px; }

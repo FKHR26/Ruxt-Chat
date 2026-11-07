@@ -1,4 +1,4 @@
-use crate::auth::username_for_token;
+use crate::auth::user_for_token;
 use crate::AppState;
 use axum::extract::ws::{Message, WebSocket, WebSocketUpgrade};
 use axum::extract::{Path, Query, State};
@@ -11,7 +11,7 @@ use uuid::Uuid;
 #[derive(Serialize, Clone)]
 pub struct ChatMessage {
     pub id: String,
-    pub username: String,
+    pub sender_username: String,
     pub content: String,
 }
 
@@ -22,23 +22,34 @@ pub struct WsQuery {
 
 pub async fn ws_handler(
     ws: WebSocketUpgrade,
-    Path(channel_id): Path<Uuid>,
+    Path(conversation_id): Path<Uuid>,
     Query(query): Query<WsQuery>,
     State(state): State<Arc<AppState>>,
 ) -> impl IntoResponse {
-    // Resolve the token to a username before upgrading, so an invalid
-    // token never even opens a socket.
-    let Some(username) = username_for_token(&state, query.token).await else {
+    let Some((user_id, username)) = user_for_token(&state, query.token).await else {
         return axum::http::StatusCode::UNAUTHORIZED.into_response();
     };
 
-    ws.on_upgrade(move |socket| handle_socket(socket, state, channel_id, username))
+    // Make sure this user is actually a participant in this conversation,
+    // so a stolen conversation id alone can't be used to read someone
+    // else's DMs.
+    if !state.registry.user_in_conversation(conversation_id, user_id).await {
+        return axum::http::StatusCode::FORBIDDEN.into_response();
+    }
+
+    ws.on_upgrade(move |socket| handle_socket(socket, state, conversation_id, user_id, username))
         .into_response()
 }
 
-async fn handle_socket(socket: WebSocket, state: Arc<AppState>, channel_id: Uuid, username: String) {
-    let Some(tx) = state.registry.sender_for(channel_id) else {
-        return; // unknown channel id, drop the connection
+async fn handle_socket(
+    socket: WebSocket,
+    state: Arc<AppState>,
+    conversation_id: Uuid,
+    user_id: Uuid,
+    username: String,
+) {
+    let Some(tx) = state.registry.sender_for(conversation_id) else {
+        return;
     };
 
     let (mut sender, mut receiver) = socket.split();
@@ -58,12 +69,12 @@ async fn handle_socket(socket: WebSocket, state: Arc<AppState>, channel_id: Uuid
         while let Some(Ok(Message::Text(text))) = receiver.next().await {
             let id = registry
                 .registry
-                .save_message(channel_id, &username, &text)
+                .save_message(conversation_id, user_id, &text)
                 .await;
 
             let chat_msg = ChatMessage {
                 id: id.to_string(),
-                username: username.clone(),
+                sender_username: username.clone(),
                 content: text,
             };
             if let Ok(json) = serde_json::to_string(&chat_msg) {

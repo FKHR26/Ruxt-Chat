@@ -1,38 +1,61 @@
-use crate::model::{CreateChannelReq, CreateServerReq};
+use crate::auth::user_for_token;
 use crate::AppState;
-use axum::extract::{Path, State};
+use axum::extract::{Path, Query, State};
+use axum::http::StatusCode;
 use axum::Json;
+use serde::Deserialize;
 use std::sync::Arc;
 use uuid::Uuid;
 
-pub async fn list_servers(State(state): State<Arc<AppState>>) -> Json<serde_json::Value> {
-    let servers = state.registry.list_servers().await;
-    Json(serde_json::json!(servers))
+#[derive(Deserialize)]
+pub struct TokenQuery {
+    pub token: Uuid,
 }
 
-pub async fn create_server(
-    State(state): State<Arc<AppState>>,
-    Json(req): Json<CreateServerReq>,
-) -> Json<serde_json::Value> {
-    let server = state.registry.add_server(req.name).await;
-    Json(serde_json::json!(server))
+#[derive(Deserialize)]
+pub struct AddFriendReq {
+    pub token: Uuid,
+    pub username: String,
 }
 
-pub async fn create_channel(
+pub async fn list_friends(
     State(state): State<Arc<AppState>>,
-    Path(server_id): Path<Uuid>,
-    Json(req): Json<CreateChannelReq>,
-) -> Json<serde_json::Value> {
-    match state.registry.add_channel(server_id, req.name).await {
-        Some(channel) => Json(serde_json::json!(channel)),
-        None => Json(serde_json::json!({ "error": "server not found" })),
+    Query(query): Query<TokenQuery>,
+) -> Result<Json<serde_json::Value>, StatusCode> {
+    let (user_id, _) = user_for_token(&state, query.token)
+        .await
+        .ok_or(StatusCode::UNAUTHORIZED)?;
+    let friends = state.registry.list_friends(user_id).await;
+    Ok(Json(serde_json::json!(friends)))
+}
+
+pub async fn add_friend(
+    State(state): State<Arc<AppState>>,
+    Json(req): Json<AddFriendReq>,
+) -> Result<Json<serde_json::Value>, StatusCode> {
+    let (user_id, _) = user_for_token(&state, req.token)
+        .await
+        .ok_or(StatusCode::UNAUTHORIZED)?;
+
+    match state.registry.add_friend(user_id, &req.username).await {
+        Some(entry) => Ok(Json(serde_json::json!(entry))),
+        None => Ok(Json(serde_json::json!({ "error": "no user with that username" }))),
     }
 }
 
-pub async fn channel_history(
+pub async fn conversation_history(
     State(state): State<Arc<AppState>>,
-    Path(channel_id): Path<Uuid>,
-) -> Json<serde_json::Value> {
-    let history = state.registry.load_history(channel_id).await;
-    Json(serde_json::json!(history))
+    Path(conversation_id): Path<Uuid>,
+    Query(query): Query<TokenQuery>,
+) -> Result<Json<serde_json::Value>, StatusCode> {
+    let (user_id, _) = user_for_token(&state, query.token)
+        .await
+        .ok_or(StatusCode::UNAUTHORIZED)?;
+
+    if !state.registry.user_in_conversation(conversation_id, user_id).await {
+        return Err(StatusCode::FORBIDDEN);
+    }
+
+    let history = state.registry.load_history(conversation_id).await;
+    Ok(Json(serde_json::json!(history)))
 }

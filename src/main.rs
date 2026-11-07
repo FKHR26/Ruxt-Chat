@@ -17,7 +17,7 @@ pub struct AppState {
 
 #[tokio::main]
 async fn main() {
-    dotenvy::dotenv().ok(); // load DATABASE_URL from a .env file if present
+    dotenvy::dotenv().ok();
 
     let database_url =
         std::env::var("DATABASE_URL").expect("DATABASE_URL must be set (see .env)");
@@ -40,10 +40,9 @@ async fn main() {
     let app = Router::new()
         .route("/api/auth/signup", post(auth::signup))
         .route("/api/auth/login", post(auth::login))
-        .route("/api/servers", get(api::list_servers).post(api::create_server))
-        .route("/api/servers/:server_id/channels", post(api::create_channel))
-        .route("/api/channels/:channel_id/history", get(api::channel_history))
-        .route("/ws/:channel_id", get(ws::ws_handler))
+        .route("/api/friends", get(api::list_friends).post(api::add_friend))
+        .route("/api/conversations/:conversation_id/history", get(api::conversation_history))
+        .route("/ws/:conversation_id", get(ws::ws_handler))
         .fallback_service(ServeDir::new("static"))
         .layer(CorsLayer::permissive())
         .with_state(state);

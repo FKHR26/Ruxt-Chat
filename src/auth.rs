@@ -86,16 +86,20 @@ async fn create_session(state: &Arc<AppState>, user_id: Uuid, username: &str) ->
 
 /// Looks up which username a session token belongs to. Returns None for
 /// a missing/invalid token, which callers should treat as "not logged in".
-pub async fn username_for_token(state: &Arc<AppState>, token: Uuid) -> Option<String> {
-    let row: Option<(String,)> = sqlx::query_as(
-        "SELECT users.username FROM sessions
+// pub async fn username_for_token(state: &Arc<AppState>, token: Uuid) -> Option<String> {
+//     user_for_token(state, token).await.map(|(_, username)| username)
+// }
+
+/// Looks up the (user_id, username) a session token belongs to. This is
+/// the one to use whenever you need the id, not just a display name.
+pub async fn user_for_token(state: &Arc<AppState>, token: Uuid) -> Option<(Uuid, String)> {
+    sqlx::query_as(
+        "SELECT users.id, users.username FROM sessions
          JOIN users ON users.id = sessions.user_id
          WHERE sessions.token = $1",
     )
     .bind(token)
     .fetch_optional(&state.registry.pool)
     .await
-    .unwrap_or(None);
-
-    row.map(|(username,)| username)
+    .unwrap_or(None)
 }

@@ -18,14 +18,65 @@
   </div>
 
   <div id="app" style="display:none">
-  <div id="servers"></div>
-  <div id="channels"><h2>Channels</h2><div id="channelList"></div></div>
-  <div id="main">
-    <div id="messages"></div>
-    <div id="input-bar">
-      <input id="msgInput" placeholder="Message" autocomplete="off">
+
+    <!-- LEFT: sidebar with tabs + chat list -->
+    <div id="sidebar">
+      <!-- Chats tab -->
+      <div id="tab-chats" class="tab-page">
+        <div class="top-bar">
+          <h1>Ruxt-Chats</h1>
+          <button id="addFriendBtn" class="icon-btn">+</button>
+        </div>
+        <div id="friendList"></div>
+      </div>
+
+      <!-- Status tab -->
+      <div id="tab-status" class="tab-page" style="display:none">
+        <div class="top-bar"><h1>Status</h1></div>
+        <p class="placeholder-text">No status updates yet.</p>
+      </div>
+
+      <!-- Calls tab -->
+      <div id="tab-calls" class="tab-page" style="display:none">
+        <div class="top-bar"><h1>Calls</h1></div>
+        <p class="placeholder-text">No call history yet.</p>
+      </div>
+
+      <div id="tabBar">
+        <button class="tab-btn active" data-tab="chats">Chats</button>
+        <button class="tab-btn" data-tab="status">Status</button>
+        <button class="tab-btn" data-tab="calls">Calls</button>
+      </div>
     </div>
+
+    <!-- RIGHT: either the open chat, or a placeholder -->
+    <div id="mainPane">
+      <div id="emptyState">
+        <p>Open any chat to start conversation</p>
+      </div>
+
+      <div id="dmView" style="display:none">
+        <div class="top-bar">
+          <h1 id="dmTitle"></h1>
+        </div>
+        <div id="messages"></div>
+        <div id="input-bar">
+          <input id="msgInput" placeholder="Message" autocomplete="off">
+        </div>
+      </div>
+    </div>
+
   </div>
+
+  <!-- Add friend modal -->
+  <div id="addFriendModal" style="display:none">
+    <div id="addFriendBox">
+      <h3>Add friend</h3>
+      <input id="friendUsername" placeholder="Their username">
+      <button id="confirmAddFriend">Add</button>
+      <button id="cancelAddFriend">Cancel</button>
+      <p id="addFriendError"></p>
+    </div>
   </div>
 
 <script src="script.js"></script>

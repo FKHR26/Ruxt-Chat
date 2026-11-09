@@ -64,6 +64,9 @@
     padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     border-top: 1px solid #35373c;
     flex-shrink: 0;
+    
+    /* Soft, upward-facing dark shadow for sleek dark UI integration */
+    box-shadow: 0 -8px 24px #00000050; /* 10% opacity black */
 }
 
 #input-bar input {

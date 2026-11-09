@@ -9,7 +9,7 @@ document.getElementById('cancelAddFriend').onclick = () => {
 document.getElementById('confirmAddFriend').onclick = async () => {
   const username = friendUsernameInput.value.trim();
   if (!username) return;
-  const res = await fetch('/api/friends', {
+  const res = await fetch(`${SERVER_URL}/api/friends`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ token: authToken, username }),

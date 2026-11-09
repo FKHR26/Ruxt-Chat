@@ -27,8 +27,28 @@
                   flex-shrink: 0; }
 .friend-name { font-size: 15px; }
 
-#tabBar { display: flex; border-top: 1px solid #35373c; background: var(--panel);
+#tabBar { position: relative; display: flex; border-top: 1px solid #35373c; background: var(--panel);
           padding-bottom: env(safe-area-inset-bottom, 0px); }
+#tabBar::before { content: ""; position: absolute; top: -1px; left: 0; width: calc(100% / 3);
+                  height: 2px; background: var(--accent); pointer-events: none;
+                  transform: translateX(var(--active-tab-offset, 0%));
+                  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1); }
 .tab-btn { flex: 1; padding: 24px 0; background: none; border: none; color: var(--muted);
-           font-size: 13px; cursor: pointer;}
+           font-size: 13px; cursor: pointer; transition: color 180ms ease; }
 .tab-btn.active { color: var(--accent); font-weight: 600; }
+
+.tab-page--enter-left { animation: tab-page-enter-left 240ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.tab-page--enter-right { animation: tab-page-enter-right 240ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes tab-page-enter-left {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes tab-page-enter-right {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #tabBar::before, .tab-btn { transition: none; }
+  .tab-page--enter-left, .tab-page--enter-right { animation: none; }
+}

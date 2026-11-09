@@ -17,8 +17,8 @@ async function authRequest(path) {
   enterApp();
 }
 
-document.getElementById('loginBtn').onclick = () => authRequest('/api/auth/login');
-document.getElementById('signupBtn').onclick = () => authRequest('/api/auth/signup');
+document.getElementById('loginBtn').onclick = () => authRequest(`${SERVER_URL}/api/auth/login`);
+document.getElementById('signupBtn').onclick = () => authRequest(`${SERVER_URL}/api/auth/signup`);
 
 const savedToken = sessionStorage.getItem('token');
 if (savedToken) {

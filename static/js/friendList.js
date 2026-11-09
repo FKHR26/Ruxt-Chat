@@ -1,5 +1,5 @@
 async function loadFriends() {
-  const res = await fetch(`/api/friends?token=${authToken}`);
+  const res = await fetch(`${SERVER_URL}/api/friends?token=${authToken}`);
   friends = await res.json();
   renderFriends();
 }

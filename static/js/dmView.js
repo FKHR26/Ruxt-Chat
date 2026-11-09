@@ -17,15 +17,14 @@ async function openDm(conversationId, friendUsername) {
   appRoot.classList.add('chat-open'); // NEW: on mobile, slides the chat view over the list
   renderFriends(); // from sidebar.js — re-render so the clicked row highlights
 
-  const res = await fetch(`/api/conversations/${conversationId}/history?token=${authToken}`);
+  const res = await fetch(`${SERVER_URL}/api/conversations/${conversationId}/history?token=${authToken}`);
   const history = await res.json();
   history.forEach(renderMessage);
 
   if (ws) ws.close();
   // Use wss:// when the page itself loaded over https (e.g. a public
   // Codespace URL) — browsers block insecure ws:// from an https:// page.
-  const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-  ws = new WebSocket(`${wsProtocol}//${location.host}/ws/${conversationId}?token=${authToken}`);
+  ws = new WebSocket(`${WS_BASE}/ws/${conversationId}?token=${authToken}`);
   ws.onmessage = (event) => renderMessage(JSON.parse(event.data));
 }
 

@@ -1,18 +1,16 @@
-﻿name: Build Ruxt-Chat Client
+﻿name: Build Ruxt-Chat-Client
 
-# Only runs when something inside ruxt-chat-client actually changes,
-# or when triggered manually - not on every server-code commit.
 on:
   push:
-    paths:
-      - 'ruxt-chat-client/**'
+    tags:
+      - 'app-v*'   # push a tag like app-v0.1.0 to trigger a release build
   workflow_dispatch:
 
 jobs:
-  build:
+  release:
     strategy:
+      fail-fast: false
       matrix:
-        # Builds for all three desktop platforms in parallel.
         platform: [windows-latest, macos-latest, ubuntu-latest]
 
     runs-on: ${{ matrix.platform }}
@@ -41,12 +39,14 @@ jobs:
       - name: Install npm dependencies
         run: npm install
 
-      - name: Build the app
-        run: npm run tauri build
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+      - name: Build and release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: ruxt-chat-client-${{ matrix.platform }}
-          path: |
-            ruxt-chat-client/src-tauri/target/release/bundle/**
+          projectPath: ruxt-chat-client
+          tagName: ${{ github.ref_name }}
+          releaseName: 'Ruxt-Chat Client ${{ github.ref_name }}'
+          releaseBody: 'Automated pre-release build.'
+          releaseDraft: false
+          prerelease: true

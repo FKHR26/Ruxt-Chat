@@ -22,7 +22,10 @@ async function openDm(conversationId, friendUsername) {
   history.forEach(renderMessage);
 
   if (ws) ws.close();
-  ws = new WebSocket(`ws://${location.host}/ws/${conversationId}?token=${authToken}`);
+  // Use wss:// when the page itself loaded over https (e.g. a public
+  // Codespace URL) — browsers block insecure ws:// from an https:// page.
+  const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  ws = new WebSocket(`${wsProtocol}//${location.host}/ws/${conversationId}?token=${authToken}`);
   ws.onmessage = (event) => renderMessage(JSON.parse(event.data));
 }
 

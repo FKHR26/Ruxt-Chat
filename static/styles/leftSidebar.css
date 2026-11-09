@@ -1,54 +1,176 @@
-#sidebar { width: 360px; min-width: 280px; display: flex; flex-direction: column;
-           border-right: 1px solid #26272b; background: var(--bg); }
+#sidebar {
+  width: 360px;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #26272b;
+  background: var(--bg);
+}
 
-.top-bar { display: flex; align-items: center; justify-content: space-between;
-           padding: 16px; border-bottom: 1px solid #35373c; }
-.top-bar h1 { font-size: 20px; margin: 0; }
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid #35373c;
+}
+
+.top-bar h1 {
+  font-size: 20px;
+  margin: 0;
+}
 
 /* Used by the DM view's top bar — back button + title, left-aligned
    with a gap, instead of the default space-between */
-.top-bar.with-back { justify-content: flex-start; gap: 12px; }
-.icon-btn { background: var(--accent); color: white; border: none; border-radius: 50%;
-            width: 36px; height: 36px; font-size: 18px; cursor: pointer; line-height: 1; }
+.top-bar.with-back {
+  justify-content: flex-start;
+  gap: 12px;
+}
 
-.tab-page { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
-.placeholder-text { color: var(--muted); text-align: center; margin-top: 40px; }
+.icon-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.tab-page {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.placeholder-text {
+  color: var(--muted);
+  text-align: center;
+  margin-top: 40px;
+}
 
 /* Back button is hidden by default — only shown on mobile (see mobile.css),
    since desktop shows both panes at once */
-#backBtn { display: none; }
-
-#friendList { flex: 1; overflow-y: auto; }
-.friend-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px;
-              cursor: pointer; border-bottom: 1px solid #26272b; }
-.friend-row:hover, .friend-row.active { background: var(--panel); }
-.friend-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--accent);
-                  display: flex; align-items: center; justify-content: center; font-weight: 600;
-                  flex-shrink: 0; }
-.friend-name { font-size: 15px; }
-
-#tabBar { position: relative; display: flex; border-top: 1px solid #35373c; background: var(--panel);
-          padding-bottom: env(safe-area-inset-bottom, 0px); }
-#tabBar::before { content: ""; position: absolute; top: -1px; left: 0; width: calc(100% / 3);
-                  height: 2px; background: var(--accent); pointer-events: none;
-                  transform: translateX(var(--active-tab-offset, 0%));
-                  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1); }
-.tab-btn { flex: 1; padding: 24px 0; background: none; border: none; color: var(--muted);
-           font-size: 13px; cursor: pointer; transition: color 180ms ease; }
-.tab-btn.active { color: var(--accent); font-weight: 600; }
-
-.tab-page--enter-left { animation: tab-page-enter-left 240ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-.tab-page--enter-right { animation: tab-page-enter-right 240ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-@keyframes tab-page-enter-left {
-  from { opacity: 0; transform: translateX(-24px); }
-  to { opacity: 1; transform: translateX(0); }
+#backBtn {
+  display: none;
 }
+
+#friendList {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.friend-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #26272b;
+}
+
+.friend-row:hover,
+.friend-row.active {
+  background: var(--panel);
+}
+
+.friend-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.friend-name {
+  font-size: 15px;
+}
+
+#tabBar {
+  position: relative;
+  display: flex;
+  border-top: 1px solid #35373c;
+  background: var(--panel);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+#tabBar::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: calc(100% / 3);
+  height: 2px;
+  background: var(--accent);
+  pointer-events: none;
+  transform: translateX(var(--active-tab-offset, 0%));
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 24px 0;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: color 180ms ease;
+}
+
+.tab-btn.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.tab-page--enter-left {
+  animation: tab-page-enter-left 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.tab-page--enter-right {
+  animation: tab-page-enter-right 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes tab-page-enter-left {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 @keyframes tab-page-enter-right {
-  from { opacity: 0; transform: translateX(24px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #tabBar::before, .tab-btn { transition: none; }
-  .tab-page--enter-left, .tab-page--enter-right { animation: none; }
+
+  #tabBar::before,
+  .tab-btn {
+    transition: none;
+  }
+
+  .tab-page--enter-left,
+  .tab-page--enter-right {
+    animation: none;
+  }
 }

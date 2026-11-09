@@ -1,14 +1,41 @@
 /* ---------- Mobile layout ---------- */
 @media (max-width: 768px) {
-  #app { flex-direction: row; }
-  #sidebar { width: 100vw; min-width: 0; border-right: none; }
-  #mainPane { display: none; }
-  #emptyState { display: none; }
+  #app {
+    flex-direction: row;
+  }
 
-  #app.chat-open #sidebar { display: none; }
-  #app.chat-open #mainPane { display: flex; width: 100vw; }
+  #sidebar {
+    width: 100vw;
+    min-width: 0;
+    border-right: none;
+  }
 
-  #backBtn { display: inline-flex; align-items: center; justify-content: center; }
+  #mainPane {
+    display: none;
+  }
 
-  #authBox, #addFriendBox { width: 90vw; max-width: 320px; }
+  #emptyState {
+    display: none;
+  }
+
+  #app.chat-open #sidebar {
+    display: none;
+  }
+
+  #app.chat-open #mainPane {
+    display: flex;
+    width: 100vw;
+  }
+
+  #backBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #authBox,
+  #addFriendBox {
+    width: 90vw;
+    max-width: 320px;
+  }
 }

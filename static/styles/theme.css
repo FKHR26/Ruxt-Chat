@@ -1,10 +1,29 @@
 :root {
-  --bg: #1e1f22; --panel: #2b2d31; --accent: #5865f2;
-  --text: #dbdee1; --muted: #949ba4; --bubble-me: #5865f2; --bubble-them: #2b2d31;
+  --bg: #1e1f22;
+  --panel: #2b2d31;
+  --accent: #5865f2;
+  --text: #dbdee1;
+  --muted: #949ba4;
+  --bubble-me: #5865f2;
+  --bubble-them: #2b2d31;
   --hover-accent: #6f7af0;
 }
-* { box-sizing: border-box; }
-body { margin: 0; font-family: "gg sans", Helvetica, Arial, sans-serif;
-       background: var(--bg); color: var(--text); height: 100dvh; overflow: hidden; }
 
-#app { display: flex; height: 100dvh; width: 100vw; }
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "gg sans", Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100dvh;
+  overflow: hidden;
+}
+
+#app {
+  display: flex;
+  height: 100dvh;
+  width: 100vw;
+}

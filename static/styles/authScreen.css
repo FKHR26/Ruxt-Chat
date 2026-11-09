@@ -1,11 +1,66 @@
-#authScreen { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
-#authBox { background: var(--panel); padding: 32px; border-radius: 8px; width: 300px;
-           display: flex; flex-direction: column; gap: 10px; }
-#authBox h2 { margin: 0 0 8px; text-align: center; }
-#authBox input { padding: 10px 12px; border: none; border-radius: 6px; background: #383a40;
-                  color: var(--text); font-size: 14px; }
-#authBox button { padding: 10px; border: none; border-radius: 6px; cursor: pointer;
-                   font-weight: 600; font-size: 14px; }
-#loginBtn { background: var(--accent); color: white; }
-#signupBtn { background: #3f4248; color: var(--text); }
-#authError { color: #f23f42; font-size: 13px; margin: 0; min-height: 16px; }
+#authScreen {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#authBox {
+    background: var(--panel);
+    padding: 32px;
+    border-radius: 8px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#authBox h2 {
+    margin: 0 0 8px;
+    text-align: center;
+}
+
+#authBox input {
+    padding: 10px 12px;
+    border: none;
+    border-radius: 6px;
+    background: #383a40;
+    color: var(--text);
+    font-size: 14px;
+}
+
+#authBox button {
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+#loginBtn {
+    background: var(--accent);
+    color: white;
+}
+
+#loginBtn:hover {
+    background-image: linear-gradient(90deg, #5865f2 0%, #767fe2 50%, #a4a9df 100%);
+}
+
+#signupBtn {
+    background: #3f4248;
+    color: var(--text);
+}
+
+#signupBtn:hover {
+    background: #45474e;
+    color: var(--text);
+}
+
+#authError {
+    color: #f23f42;
+    font-size: 13px;
+    margin: 0;
+    min-height: 16px;
+}

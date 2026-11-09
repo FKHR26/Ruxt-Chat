@@ -1,0 +1,52 @@
+﻿name: Build Ruxt-Chat Client
+
+# Only runs when something inside ruxt-chat-client actually changes,
+# or when triggered manually - not on every server-code commit.
+on:
+  push:
+    paths:
+      - 'ruxt-chat-client/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        # Builds for all three desktop platforms in parallel.
+        platform: [windows-latest, macos-latest, ubuntu-latest]
+
+    runs-on: ${{ matrix.platform }}
+
+    defaults:
+      run:
+        working-directory: ruxt-chat-client
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install Linux build dependencies
+        if: matrix.platform == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build the app
+        run: npm run tauri build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ruxt-chat-client-${{ matrix.platform }}
+          path: |
+            ruxt-chat-client/src-tauri/target/release/bundle/**

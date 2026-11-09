@@ -6,7 +6,10 @@
 // longer loads *from* your server — it loads from a local Tauri address —
 // so relative paths like fetch('/api/...') or ws://location.host no longer
 // point anywhere useful. Everything must use this full address instead.
-const SERVER_URL = "https://refactored-space-sniffle-7vw9rr6qxx6c66x-3000.app.github.dev/";
+//
+// Trailing slash is stripped automatically below, so it's fine even if
+// one sneaks in here — this prevents ".../api" turning into ".../api//api".
+const SERVER_URL = "https://refactored-space-sniffle-7vw9rr6qxx6c66x-3000.app.github.dev".replace(/\/+$/, "");
 
 // Automatically picks ws:// or wss:// based on whether SERVER_URL itself is https.
 const WS_BASE = SERVER_URL.replace(/^http/, "ws");

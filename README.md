@@ -1,13 +1,13 @@
 # Ruxt-Chat
 
-A messaging app built from scratch in Rust — a simple, modern alternative to building on top of someone else's chat SDK. Friends, direct messages, and a WhatsApp-style tabbed interface, with a web client and a native desktop/mobile client built on the same backend.
+A messaging app built from scratch in Rust — a simple, modern alternative to building on top of someone else's chat SDK. Friends, direct messages, and a modern-style tabbed interface, with a web client and a native desktop/mobile client built on the same backend.
 
 ## Features
 
 - 🔐 **Accounts** — sign up and log in with a username and password (Argon2-hashed, session tokens)
 - 👥 **Friends** — add anyone by username; friendship and a conversation are created automatically
 - 💬 **Direct messages** — real-time chat over WebSockets, with full message history saved to Postgres
-- 📱 **Responsive UI** — a WhatsApp-style three-tab layout (Chats / Status / Calls) that adapts between a two-pane desktop view and a full-screen mobile view
+- 📱 **Responsive UI** — a modern-style three-tab layout (Chats / Status / Calls) that adapts between a two-pane desktop view and a full-screen mobile view
 - 🖥️ **Native client** — the same frontend wrapped with [Tauri](https://tauri.app), buildable as a Windows/macOS/Linux desktop app
 
 ## Tech stack

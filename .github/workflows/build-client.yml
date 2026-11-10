@@ -3,8 +3,11 @@
 on:
   push:
     tags:
-      - 'app-v*'   # push a tag like app-v0.1.0 to trigger a release build
+      - 'app-v*'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   release:
